@@ -2,7 +2,151 @@
 // Description: Contains the definition for the Huffman class, and the main function of the program
 // Author: Cody Stuck
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class HuffmanTree
 {
+    // subclasses
+
+    // HuffmanNode: node class to be used in the HuffmanTree
+    private class HuffmanNode implements Comparable<HuffmanNode>
+    {
+        // members
+        public int frequency;
+        public String element;
+        public HuffmanNode right, left;
+
+        // with leaves constructor
+        HuffmanNode(String newElement, int newFrequency, HuffmanNode newLeft, HuffmanNode newRight)
+        {
+            this.element = newElement;
+            this.frequency = newFrequency;
+            this.left = newLeft;
+            this.right = newRight;
+        }
+
+        // without leaves constructor
+        HuffmanNode(String newElement, int newFrequency)
+        {
+            this.element = newElement;
+            this.frequency = newFrequency;
+            this.left = null;
+            this.right = null;
+        }
+
+        // comparator
+        @Override
+        public int compareTo(HuffmanNode nodeToCompare)
+        {
+            return(this.frequency - nodeToCompare.frequency);
+        }
+    }
+
+    // members
+    HuffmanNode root;
+    ArrayList<Integer> frequencyList;
+    ArrayList<HuffmanNode> frequencyNodes;
+    char end;
+
+    // accessors
+    public void printCodes()
+    {
+        printCodesHelper(root, "");
+    }
+
+    // helpers
+    private void printCodesHelper(HuffmanNode t, String code)
+    {
+        // make sure that the node exists
+        if (t != null)
+        {
+            printCodesHelper(t.left, code + "1");
+            printCodesHelper(t.right, code + "0");
+
+            if(t.left == null && t.right == null)
+            {
+                System.out.print(t.element);
+                System.out.print(": ");
+                System.out.print(code);
+                System.out.print("\n");
+            }
+        }
+    }
+
+    // constructor
+    HuffmanTree(String rawText)
+    {
+        root = null;
+        frequencyList = new ArrayList<Integer>(Collections.nCopies(256, 0));
+        frequencyNodes = new ArrayList<HuffmanNode>(0);
+
+        String tempString = "";
+
+        // make sure that the input string is not empty
+        if (rawText.length() <= 0)
+        {
+            // TODO: figure out how to throw exceptions
+        }
+
+        for (int i = 0; i < 255; i++) // TODO: fix this by initializing the list with 0's
+        {
+            frequencyList.set(i, 0);
+        }
+
+        // get frequencies of all ascii characters
+        for (int i = 0; i < rawText.length(); i++)
+        {
+            int asciiVal = rawText.charAt(i);
+            frequencyList.set(asciiVal, frequencyList.get(asciiVal) + 1);
+        }
+
+        // create list of nodes of frequencies
+        for (int i = 0; i < 256; i++)
+        {
+            if (frequencyList.get(i) != 0) {
+                tempString = Character.toString((char) i);
+
+                frequencyNodes.add(new HuffmanNode(tempString, frequencyList.get(i), null, null));
+            } else if (i == 0) {
+                end = (char) i;
+                tempString = Character.toString((char) i);
+                frequencyNodes.add(new HuffmanNode(tempString, 1, null, null));
+            }
+        }
+
+        // create tree
+        while(frequencyNodes.size() > 1)
+        {
+            Collections.sort(frequencyNodes);
+
+            for (int i = 0; i < frequencyNodes.size(); i++)
+            {
+                System.out.print(frequencyNodes.get(i).element);
+                System.out.print(":");
+                System.out.print(frequencyNodes.get(i).frequency);
+                System.out.print("\n");
+            }
+            System.out.print("\n");
+
+            frequencyNodes.add(new HuffmanNode(
+                        frequencyNodes.get(0).element + frequencyNodes.get(1).element,
+                        frequencyNodes.get(0).frequency + frequencyNodes.get(1).frequency,
+                        frequencyNodes.get(1),
+                        frequencyNodes.get(0)));
+
+            frequencyNodes.remove(0);
+            frequencyNodes.remove(0);
+        }
+
+        root = frequencyNodes.get(0);
+    }
+
+    // main function
+    public static void main(String args[])
+    {
+        HuffmanTree test = new HuffmanTree("a bb ccc dddd eeeee");
+        test.printCodes();
+    }
 
 }
