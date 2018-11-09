@@ -47,12 +47,17 @@ public class HuffmanTree
     HuffmanNode root;
     ArrayList<Integer> frequencyList;
     ArrayList<HuffmanNode> frequencyNodes;
-    char end;
+    char end; // TODO: is this needed?
 
     // accessors
     public void printCodes()
     {
         printCodesHelper(root, "");
+    }
+
+    public void printTree()
+    {
+        printTreeHelper(root);
     }
 
     // helpers
@@ -66,11 +71,21 @@ public class HuffmanTree
 
             if(t.left == null && t.right == null)
             {
-                System.out.print(t.element);
-                System.out.print(": ");
-                System.out.print(code);
-                System.out.print("\n");
+                System.out.print(t.element + ": " + code + "\n");
             }
+        }
+    }
+
+    // printTreeHelper: recursively prints the tree
+    // preconditions: root is the parent node to run the recursive function on
+    // postconditions, the node will be printed, then the nodes below will be recursively printed
+    private void printTreeHelper(HuffmanNode parent)
+    {
+        if (parent != null)
+        {
+            printTreeHelper(parent.left);
+            printTreeHelper(parent.right);
+            System.out.print(parent.frequency + " (" + parent.element + ")\n");
         }
     }
 
@@ -142,11 +157,12 @@ public class HuffmanTree
         root = frequencyNodes.get(0);
     }
 
-    // main function
+    // driver function for HuffmanTree class
     public static void main(String args[])
     {
         HuffmanTree test = new HuffmanTree("a bb ccc dddd eeeee");
         test.printCodes();
+        test.printTree();
     }
 
 }
