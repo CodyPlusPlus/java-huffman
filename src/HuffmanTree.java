@@ -47,20 +47,78 @@ public class HuffmanTree
     HuffmanNode root;
     ArrayList<Integer> frequencyList;
     ArrayList<HuffmanNode> frequencyNodes;
+    String raw;
+
     char end; // TODO: is this needed?
 
     // accessors
+
+    // printCodes: prints the codes assigned to every character
+    // postconditions: the codes of each character is printed to the console
     public void printCodes()
     {
         printCodesHelper(root, "");
     }
 
+    // printTree: prints the Huffman tree in post order
+    // postconditions: every node in the tree is printed
     public void printTree()
     {
         printTreeHelper(root);
     }
 
+    // saveCharEncode: encodes the raw text using the tree, then saves the resulting binary string to a file
+    // postconditions: a binary string file (1's and 0's) will be saved to the disk, the length of the string will be returned
+    public int saveCharEncode(String fileName)
+    {
+        String toEncode = raw + end;
+        String encoded = "";
+        String curr = "";
+        HuffmanNode temp = root;
+
+        for (int i = 0; i < toEncode.length(); i++)
+        {
+            temp = root;
+            curr = Character.toString(toEncode.charAt(i));
+
+            while (!temp.element.equals(curr))
+            {
+                if (temp.left != null || temp.right != null) // make sure that the node has at least one child
+                {
+                    if (temp.left.element.contains(curr))
+                    {
+                        temp = temp.left;
+                        encoded += "0";
+                    }
+                    else if (temp.right.element.contains(curr))
+                    {
+                        temp = temp.right;
+                        encoded += "1";
+                    }
+                    else
+                    {
+                        //TODO: figure out exceptions and throw "Character not found on either children nodes"
+                    }
+                }
+                else
+                {
+                    //TODO: throw "Node has no children but character hasn't been found yet"
+                }
+            }
+        }
+
+        System.out.println(encoded);
+        // TODO: learn how to save this to a text file instead of printing to console
+
+        return(encoded.length());
+    }
+
+
     // helpers
+
+    // printCodesHelper: recursive helper function for printCodes
+    // preconditions: t is the parent node to run the recursive function on
+    // postconditions: the codes of every character are printed recursively
     private void printCodesHelper(HuffmanNode t, String code)
     {
         // make sure that the node exists
@@ -78,7 +136,7 @@ public class HuffmanTree
 
     // printTreeHelper: recursively prints the tree
     // preconditions: root is the parent node to run the recursive function on
-    // postconditions, the node will be printed, then the nodes below will be recursively printed
+    // postconditions: the node will be printed, then the nodes below will be recursively printed
     private void printTreeHelper(HuffmanNode parent)
     {
         if (parent != null)
@@ -90,8 +148,11 @@ public class HuffmanTree
     }
 
     // constructor
+    // preconditions: rawText is the string to be encoded
+    // postconditions: a Huffman tree will be constructed from the text to
     HuffmanTree(String rawText)
     {
+        raw = rawText;
         root = null;
         frequencyList = new ArrayList<Integer>(Collections.nCopies(256, 0));
         frequencyNodes = new ArrayList<HuffmanNode>(0);
@@ -163,6 +224,7 @@ public class HuffmanTree
         HuffmanTree test = new HuffmanTree("a bb ccc dddd eeeee");
         test.printCodes();
         test.printTree();
+        System.out.print(test.saveCharEncode("test.txt"));
     }
 
 }
