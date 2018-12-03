@@ -67,9 +67,9 @@ public class HuffmanTree
         printTreeHelper(root);
     }
 
-    // saveCharEncode: encodes the raw text using the tree, then saves the resulting binary string to a file
-    // postconditions: a binary string file (1's and 0's) will be saved to the disk, the length of the string will be returned
-    public int saveCharEncode(String fileName)
+    // printCharEncode: encodes the raw text using the tree, then saves the resulting binary string to a file
+    // postconditions: a binary string file (1's and 0's) will be output to console, the length of the string will be returned
+    public String getEncode()
     {
         String toEncode = raw + end;
         String encoded = "";
@@ -107,12 +107,15 @@ public class HuffmanTree
             }
         }
 
-        System.out.println(encoded);
-        // TODO: learn how to save this to a text file instead of printing to console
-
-        return(encoded.length());
+        return(encoded);
     }
 
+    // testDecode: tests the decoding function by encoding the given text before decoding back to plaintext
+    // postconditions: the original text, encoded text, and decoded text will be output to the console
+    public void testDecode(String encoded)
+    {
+
+    }
 
     // helpers
 
@@ -221,10 +224,27 @@ public class HuffmanTree
     // driver function for HuffmanTree class
     public static void main(String args[])
     {
-        HuffmanTree test = new HuffmanTree("a bb ccc dddd eeeee");
-        test.printCodes();
+        String testString = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nec magna nibh. Suspendisse at lacus a quam ullamcorper suscipit. Vestibulum at leo vehicula, faucibus tellus sit amet, sodales dui. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam facilisis nibh mauris, sit amet commodo mauris rhoncus in. In at quam nulla. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ultrices, metus vitae blandit sodales, felis elit maximus sapien, ut sagittis lacus orci non tortor. Sed eget ante et ipsum semper bibendum sit amet ac ligula. Pellentesque non tempus magna, non elementum dui.";
+        //String testString = "a bb ccc dddd eeeee";
+
+        System.out.println("Testing on string:\n" + testString);
+        HuffmanTree test = new HuffmanTree(testString);
+        System.out.println();
+
+        System.out.println("Printing trees...");
         test.printTree();
-        System.out.print(test.saveCharEncode("test.txt"));
+        System.out.println();
+
+
+        System.out.println("Printing codes...");
+        test.printCodes();
+        System.out.println();
+
+
+        System.out.println("Printing encoded output and compression results...");
+        String encodedString = test.getEncode();
+        System.out.println(encodedString);
+        System.out.print("Compressed to " + encodedString.length() + " bits from " + (testString.length() * 8) + " bits (original size computed from the assumption that each character is 1 byte large)");
     }
 
 }
