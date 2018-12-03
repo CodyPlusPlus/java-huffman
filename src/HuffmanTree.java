@@ -244,16 +244,14 @@ public class HuffmanTree
         test.printTree();
         System.out.println();
 
-
         System.out.println("Printing codes...");
         test.printCodes();
         System.out.println();
 
-
         System.out.println("Printing encoded output and compression results...");
         String encodedString = test.getEncode();
         System.out.println(encodedString);
-        System.out.print("Compressed to " + encodedString.length() + " bits from " + (testString.length() * 8) + " bits (original size computed from the assumption that each character is 1 byte large)");
+        System.out.print("Compressed to " + encodedString.length() + " bits from " + (testString.length() * 8) + " bits (original string size computed from the assumption that each character is 1 byte large)");
     }
 
 }
