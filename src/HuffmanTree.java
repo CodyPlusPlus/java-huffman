@@ -109,10 +109,35 @@ public class HuffmanTree
     }
 
     // testDecode: tests the decoding function by encoding the given text before decoding back to plaintext
-    // postconditions: the original text, encoded text, and decoded text will be output to the console
-    public void testDecode(String encoded)
+    // postconditions: outputs an encoded and re-decoded string
+    public String testDecode()
     {
+        String encodedString = this.getEncode();
+        String decoded = "";
+        HuffmanNode temp = root;
+        int codeIndex = 0;
 
+        // step through the binary string as if it were binary code
+        while (codeIndex < encodedString.length())
+        {
+            temp = root;
+            while (!(temp.left == null && temp.right == null))
+            {
+                if (encodedString.charAt(codeIndex) == '0')
+                {
+                    temp = temp.left;
+                } else if (encodedString.charAt(codeIndex) == '1')
+                {
+                    temp = temp.right;
+                } else {
+                    throw new RuntimeException("Found character that was not '0' or '1'");
+                }
+                codeIndex++;
+            }
+
+            decoded += temp.element;
+        }
+        return decoded;
     }
 
     // helpers
@@ -247,7 +272,11 @@ public class HuffmanTree
         System.out.println("Printing encoded output and compression results...");
         String encodedString = test.getEncode();
         System.out.println(encodedString);
-        System.out.print("Compressed to " + encodedString.length() + " bits from " + (testString.length() * 8) + " bits (original string size computed from the assumption that each character is 1 byte large)");
+        System.out.println("Compressed to " + encodedString.length() + " bits from " + (testString.length() * 8) + " bits (original string size computed from the assumption that each character is 1 byte large)");
+        System.out.println();
+
+        System.out.println("Testing decoding...");
+        System.out.println("This should be the original string!\n" + test.testDecode());
     }
 
 }
