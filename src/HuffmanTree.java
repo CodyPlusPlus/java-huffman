@@ -49,8 +49,6 @@ public class HuffmanTree
     ArrayList<HuffmanNode> frequencyNodes;
     String raw;
 
-    char end; // TODO: is this needed?
-
     // accessors
 
     // printCodes: prints the codes assigned to every character
@@ -71,12 +69,12 @@ public class HuffmanTree
     // postconditions: a binary string file (1's and 0's) will be output to console, the length of the string will be returned
     public String getEncode()
     {
-        String toEncode = raw + end;
+        String toEncode = raw;
         String encoded = "";
         String curr = "";
         HuffmanNode temp = root;
 
-        for (int i = 0; i < toEncode.length(); i++)
+        for (int i = 0; i < raw.length(); i++)
         {
             temp = root;
             curr = Character.toString(toEncode.charAt(i));
@@ -97,12 +95,12 @@ public class HuffmanTree
                     }
                     else
                     {
-                        //TODO: figure out exceptions and throw "Character not found on either children nodes"
+                        throw new RuntimeException("Character not found on either children nodes");
                     }
                 }
                 else
                 {
-                    //TODO: throw "Node has no children but character hasn't been found yet"
+                    throw new RuntimeException("Node has no children but character hasn't been found yet");
                 }
             }
         }
@@ -165,10 +163,10 @@ public class HuffmanTree
         // make sure that the input string is not empty
         if (rawText.length() <= 0)
         {
-            // TODO: figure out how to throw exceptions
+            throw new RuntimeException("Input String cannot be empty!");
         }
 
-        for (int i = 0; i < 255; i++) // TODO: fix this by initializing the list with 0's
+        for (int i = 0; i < 255; i++)
         {
             frequencyList.set(i, 0);
         }
@@ -188,7 +186,6 @@ public class HuffmanTree
 
                 frequencyNodes.add(new HuffmanNode(tempString, frequencyList.get(i), null, null));
             } else if (i == 0) {
-                end = (char) i;
                 tempString = Character.toString((char) i);
                 frequencyNodes.add(new HuffmanNode(tempString, 1, null, null));
             }
@@ -224,6 +221,7 @@ public class HuffmanTree
     // driver function for HuffmanTree class
     public static void main(String args[])
     {
+        // this string can be replaced with any test string!
         String testString = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla feugiat convallis quam, nec laoreet massa. Pellentesque consectetur eleifend ante non dignissim. Fusce convallis diam a lacus tristique, nec posuere sapien luctus. Pellentesque aliquam tincidunt elementum. Mauris dictum, felis ut rhoncus cursus, lacus nibh congue quam, in vehicula lacus tellus nec purus. Cras mattis non eros ac vestibulum. Nullam sagittis quam ex, ac imperdiet leo rhoncus pellentesque. Cras lobortis ex vitae tellus rutrum ornare. Cras posuere sit amet neque nec imperdiet. Aliquam erat volutpat. Vivamus consequat tortor vel nisl interdum ultrices. Integer luctus sed augue et accumsan.\n" +
                 "\n" +
                 "Aliquam fringilla tempor urna sed aliquet. Cras volutpat felis ut erat ullamcorper laoreet. In a nulla pharetra, imperdiet nulla nec, dignissim quam. Sed ut tincidunt dolor. Vestibulum sodales aliquet ultrices. Vestibulum iaculis nunc id ligula bibendum, nec pellentesque elit convallis. Vestibulum faucibus urna libero, nec placerat lacus posuere sed. Nulla ac tortor imperdiet, sollicitudin ex vitae, hendrerit felis. Quisque rutrum iaculis quam in maximus. Cras laoreet hendrerit nulla, consequat efficitur lacus placerat et.\n" +
@@ -233,8 +231,6 @@ public class HuffmanTree
                 "Nam tristique risus ac fermentum dignissim. Sed sed accumsan sem, id commodo enim. Nullam sit amet mi egestas, molestie enim sed, imperdiet elit. Nullam auctor dapibus risus eu tempor. Donec aliquet, mauris sit amet vestibulum volutpat, eros libero posuere odio, et euismod turpis tellus sed magna. Mauris bibendum velit pulvinar nulla lobortis, non vestibulum elit finibus. Nam commodo ipsum nec ultrices blandit. Duis a porta lectus. Nulla ultrices nunc nec interdum imperdiet. Nullam aliquam tempor congue.\n" +
                 "\n" +
                 "Ut tincidunt metus et purus pharetra vestibulum. Morbi placerat malesuada scelerisque. Cras faucibus dolor non consequat luctus. In eleifend nibh ac metus elementum porta. Praesent purus elit, dictum vel arcu sit amet, vulputate viverra turpis. Sed ultrices tincidunt nisi quis eleifend. Morbi iaculis mollis diam ac pretium. Integer quis ultricies odio. Fusce dignissim ante eu aliquam porttitor. Mauris porttitor arcu nisi, sit amet tincidunt ligula venenatis in. Duis volutpat efficitur augue, ut feugiat purus euismod sit amet. Duis ut ipsum lacus.";
-
-        //String testString = "a bb ccc dddd eeeee";
 
         System.out.println("Testing on string:\n" + testString);
         HuffmanTree test = new HuffmanTree(testString);
